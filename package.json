@@ -170,7 +170,9 @@
     "yallist": "^4.0.0"
   },
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start":"node server.js"
+    
   },
   "author": "",
   "license": "ISC",
