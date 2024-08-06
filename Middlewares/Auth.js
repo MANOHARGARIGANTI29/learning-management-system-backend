@@ -1,7 +1,4 @@
 
-
-
-
 import jwt from "jsonwebtoken"
 import { catchAsyncError } from "./catchAsyncErrors.js"
 import ErrorHandler from "../Utils/errorHandler.js";
