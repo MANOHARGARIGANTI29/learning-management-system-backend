@@ -44,13 +44,13 @@ export const login = catchAsyncError(async(req,res,next)=>{
     return next(new ErrorHandler("Please enter all filed",400))
     const user = await User.findOne({email}).select("+password")
 
-    if(!user) return next (new ErrorHandler("User Doesn't Exist",409))
+    if(!user) return next (new ErrorHandler("Incorrect Email or Password",401))
 
         //upload file on cloudinary
         const isMatch = await user.comparePassword(password);
         if(!isMatch)
              return next(new ErrorHandler("Incorrect Email or Password",401));
-        sendToken(res,user,`Welcome back,${user.name}`,201)
+        sendToken(res,user,`Welcome back,${user.name}`,200)
 })
 
 export const logout = catchAsyncError(async(req,res,next)=>{
@@ -84,7 +84,7 @@ export const changepassword = catchAsyncError(async(req,res,next)=>{
     if(!isMatch) return next(new ErrorHandler("Incorrect Old Password",400))
         user.password = newPassword;
          await user.save();
-    res.status(200).json({
+         res.status(200).json({
         success:true,
         message:"Password Changed Successfully"
     })
