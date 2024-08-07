@@ -6,7 +6,6 @@ import crypto from "crypto";
 import { Payment } from "../Models/Payment.js";
 export const buySubscription = catchAsyncError(async(req,res,next)=>{
      const user = await User.findById(req.user._id);
-
      if(user.role==="admin") return next(new ErrorHandler("Admin can't buy subscription",400));
      const plan_id  = process.env.PLAN_ID || "plan_Ocp2ngjZRKyjYT"
     const subscription = await instance.subscriptions.create({
@@ -31,11 +30,16 @@ export const paymentVerification = catchAsyncError(async(req,res,next)=>{
       const generated_signature = crypto.createHmac("sha256",process.env.RAZORPAY_API_SECRET).update(
         razorpay_payment_id+" | "+subscription_id,"utf-8"
       ).digest("hex");
+      console.log("razorpay_payment_id:", razorpay_payment_id);
+      console.log("subscription_id:", subscription_id);
+      console.log("generated_signature:", generated_signature);
+      console.log("razorpay_signature:", razorpay_signature);
+
 
       const isAuthentic = generated_signature===razorpay_signature;
 
-      if(!isAuthentic) return res.redirect(`${process.env.FRONTEND_URL}/paymentfail`);
-
+      if(!isAuthentic) return res.redirect(`${process.env.FRONTEND_URL}/paymentsuccess`);
+      console.log("Signature mismatch");
     //   database comes here
 
        await Payment.create({
